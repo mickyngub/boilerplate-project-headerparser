@@ -9,9 +9,15 @@ var app = express();
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
 app.use(cors({optionSuccessStatus: 200}));  // some legacy browsers choke on 204
-
+app.use("", function(req,res,next) {
+  console.log(req.method + " " + req.path
+  + " - " + req.ip);
+  next();
+})
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
+//use body-parser for all path
+
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
@@ -22,6 +28,13 @@ app.get("/", function (req, res) {
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
+});
+
+app.get("/api/whoami", (req,res) => {
+  res.json(
+    {"ipaddress": req.ip,
+     "language": req.get("Accept-Language"),
+     "software": req.get("User-Agent")});
 });
 
 
